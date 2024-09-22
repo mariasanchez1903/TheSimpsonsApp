@@ -46,8 +46,18 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-
-
+    // ViewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    // LiveData
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+    //Glide
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    //Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    // Para corrutinas
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

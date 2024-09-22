@@ -7,13 +7,51 @@
     android:layout_height="match_parent"
     tools:context=".views.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:background="@drawable/bordes_inferiores_redondeados"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilBuscar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            app:boxBackgroundMode="filled"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/icon_buscar"
+            app:endIconMode="custom">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietBuscar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:hint="Personaje"
+                android:imeOptions="actionDone"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPersonajes"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="7dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:spanCount="3"
+        tools:listitem="@layout/item_rv_personaje" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
