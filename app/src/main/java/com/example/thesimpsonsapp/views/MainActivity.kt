@@ -2,16 +2,14 @@ package com.example.thesimpsonsapp.views
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.thesimpsonsapp.R
 import com.example.thesimpsonsapp.databinding.ActivityMainBinding
 import com.example.thesimpsonsapp.viewmodels.MainViewModel
+import com.example.thesimpsonsapp.viewmodels.UiState
 import com.example.thesimpsonsapp.viewmodels.adapters.PersonajeAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -29,21 +27,34 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
 
         viewModel.obtenerPersonajes()
-        viewModel.listaPersonajes.observe(this) {
-            adapter.listaPersonajes = it
-            adapter.notifyDataSetChanged()
+
+        viewModel.uiState.observe(this) { uiState ->
+            when (uiState) {
+                is UiState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is UiState.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    adapter.listaPersonajes = uiState.data
+                    adapter.notifyDataSetChanged()
+                }
+                is UiState.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(this, uiState.message, Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         binding.tilBuscar.setEndIconOnClickListener {
-            if (binding.tietBuscar.text.toString() == "") {
+            if (binding.tietBuscar.text.toString().trim().isEmpty()) {
                 viewModel.obtenerPersonajes()
             } else {
                 viewModel.obtenerPersonaje(binding.tietBuscar.text.toString().trim())
             }
         }
-
         binding.btnOpenSecondActivity.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
+            // Pasar datos si es necesario
             startActivity(intent)
         }
     }

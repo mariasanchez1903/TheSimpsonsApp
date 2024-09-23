@@ -13,25 +13,38 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel: ViewModel() {
 
-    private var _listaPersonajes = MutableLiveData<List<Personaje>>()
-    val listaPersonajes: LiveData<List<Personaje>> get() = _listaPersonajes
+
+    private val _uiState = MutableLiveData<UiState<List<Personaje>>>()
+    val uiState: LiveData<UiState<List<Personaje>>> get() = _uiState
 
     fun obtenerPersonajes() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = RetrofitClient.webService.obtenerPersonajes()
-            withContext(Dispatchers.Main) {
-                Log.d("API", response.body().toString())
-                _listaPersonajes.value = response.body()
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val response = RetrofitClient.webService.obtenerPersonajes()
+                if (response.isSuccessful) {
+                    _uiState.value = UiState.Success(response.body() ?: emptyList())
+                } else {
+                    _uiState.value = UiState.Error("Error: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Exception: ${e.message}")
             }
         }
     }
 
     fun obtenerPersonaje(personaje: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = RetrofitClient.webService.obtenerPersonaje(personaje)
-            withContext(Dispatchers.Main) {
-                Log.d("API", response.body().toString())
-                _listaPersonajes.value = response.body()
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val response = RetrofitClient.webService.obtenerPersonaje(personaje)
+                if (response.isSuccessful) {
+                    _uiState.value = UiState.Success(response.body() ?: emptyList())
+                } else {
+                    _uiState.value = UiState.Error("Error: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Exception: ${e.message}")
             }
         }
     }
